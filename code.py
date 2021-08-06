@@ -303,7 +303,7 @@ while True:
             dif = 0
         else:
             dif = 5 - dif  # when tile takes less than 5 sec to process
-        print(f'difafter:{dif}')
+        i += 1 # Load the next tile
         image_cycle = time.monotonic()
         if (i > 19):
             i = 0
