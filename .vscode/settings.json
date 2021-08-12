@@ -1,0 +1,13 @@
+{
+    "python.languageServer": "Pylance",
+    "python.linting.pylintEnabled": false,
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportMissingModuleSource": "none"
+    },
+    "python.analysis.extraPaths": [
+        "",
+        "/home/pascal/.vscode/extensions/joedevivo.vscode-circuitpython-0.1.14/stubs",
+        "/home/pascal/.config/Code/User/globalStorage/joedevivo.vscode-circuitpython/bundle/20210806/adafruit-circuitpython-bundle-py-20210806/lib"
+    ],
+    "circuitpython.board.version": "6.3.0"
+}
