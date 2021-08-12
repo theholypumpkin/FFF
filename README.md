@@ -58,5 +58,6 @@ Damit sind alle Snesoren vorbereitet.
 * Nun kommen wir zu den 6 Freigelassen Pins auf beiden Seiten. diese füllen wir mit den Gewinkelten Stiftleisten auf. Also die die um die Ecke gehen. [](https://cdn-reichelt.de/bilder/web/xxl_ws/C140/SL3.png "Gewinkelte Stiftleiste") du kannst einfach 6 abscheiden von denen die du gekauft hast.
 Damit ist der Raspberry Pi Pico fertig gelötet, lege ihn ersteinmal beiseite, ihn brauchen wir erst einmal nicht.
 
-Nun Kommen wir zum Löten, des "Featherwings", der ist realtiv komplizert zu löten, wenn du Probleme damit hast, dann frage einen Verwanten oder einen Freund.
-4. Im Set ist sehr viel Zeug, wir brauchen
+4. Nun Kommen wir zum Löten, des "Featherwings", der ist realtiv komplizert zu löten, wenn du Probleme damit hast, dann frage einen Verwanten oder einen Freund. Im Set ist sehr viel Zeug, wir brauchen, da haben den Hohlstecker-Buchse (im bild Blau), den IDC Buchse auch Schneidklemme genannt (im Bild Rot), eine Schraubklemme (im bild Grün), und ein paar Stiftleisten (im Bild Gelb).
+
+* Wir fangen mit der IDC Buchse bzw Schneidklemme an. Die ist ja im Bild Rot makiert und hat auf einer Seite eine Kerbe. _Die Kerbe ich ganz wichtig!_ Die IDC Buchse auch Schneidklemme gehört auf dem Featherwing in die Mitte
