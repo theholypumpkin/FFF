@@ -6,8 +6,8 @@
     },
     "python.analysis.extraPaths": [
         "",
-        "/home/pascal/.vscode/extensions/joedevivo.vscode-circuitpython-0.1.14/stubs",
-        "/home/pascal/.config/Code/User/globalStorage/joedevivo.vscode-circuitpython/bundle/20210806/adafruit-circuitpython-bundle-py-20210806/lib"
+        "/home/pascal/.vscode/extensions/joedevivo.vscode-circuitpython-0.1.15/stubs",
+        "/home/pascal/.config/Code/User/globalStorage/joedevivo.vscode-circuitpython/bundle/20210811/adafruit-circuitpython-bundle-py-20210811/lib"
     ],
     "circuitpython.board.version": "6.3.0"
 }
