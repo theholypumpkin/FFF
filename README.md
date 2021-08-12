@@ -1,3 +1,5 @@
+# __DIE ANLEITUNG IST AKTUELL IN AUSARBEITUNG bitte schaue später noch erinmal vorbei__
+
 # Digitales Fridays For Future Demoschild
 Dieser Python Skript stellt diverse Bilder sowie live gemessende CO2, Temperatur, Luftfeuchtigkeit, Stromverbrauch und Stromprodiktion auf zwei 32x32 LED Matrizen dar.
 Der Skript wird auf einem RaspberryPi Pico der Adafruit's Circuit Python 6.3 als Python Interpreter nutzt.
@@ -39,8 +41,22 @@ __Wichtig für bestellungen auserhalb des Europäischen Binnenmarkt ist Zoll zu 
 
 So jetzt wo alles hast können wir anfangen.
 
-## Schritt 1 Löten:
+## Schritt 1 Löten
 Wir fangen mit dem Löten der einzelen Komponenten an:
 __Warung Lötkolben werdne sehr heiß 200 oder mehr, pass auf das du dich nicht verbrennst__
-1. Wenn deine Stromsensoren (INA219) und CO2 sensor (CCS881) von Adafruit oder Sparkfun produziert worden sind, und ddu das Optionale Stemma QT/Qwiic Kabel gekauft hast dann kannst du dir etwas löten ersparen, und einfach nur 3 Sensoren in eine Reihe Stecken, Diese Sensoren haben auf den beiden kuzen Seite einen Steckverbinder wo man ein Solches Kabel einstecken kann. Wenn du von Anderen Herstellen gekauft hast, dann musst du die (meistens Beigelegte) Stiftleiste anlöten. [Hier gibt es eine Anleitung mit Bildern, wie du das bei dem CO2 Sensor macht, das selbe gilt auch für den Stromsensor](https://learn.adafruit.com/adafruit-ccs811-air-quality-sensor/assembly). 
-2. Nun müssen wir die Buchsenleistenleisten an den Raspberry Pi Pico anlöten. ![](https://cdn-reichelt.de/bilder/web/xxl_ws/C110/10120828.png) "Das ist eine Buchenleiste"
+1. Wenn deine Stromsensoren (INA219) und CO2 sensor (CCS881) von Adafruit oder Sparkfun produziert worden sind, und ddu das Optionale Stemma QT/Qwiic Kabel gekauft hast dann kannst du dir etwas löten ersparen, und einfach nur 3 Sensoren in eine Reihe Stecken, Diese Sensoren haben auf den beiden kuzen Seite einen Steckverbinder wo man ein Solches Kabel einstecken kann. Wenn du von Anderen Herstellen gekauft hast, dann musst du die (meistens Beigelegte) Stiftleiste anlöten. [Hier gibt es eine Anleitung mit Bildern, wie du das bei dem CO2 Sensor macht, das selbe gilt auch für den Stromsensor](https://learn.adafruit.com/adafruit-ccs811-air-quality-sensor/assembly).
+2. Je nachdem wo du deinen Temperatur und Luftfeuchtigkeitssensor gekauft hast, musst du löten oder auch nicht. Ich empfehle den von Pimoroni, denn hier musst du nicht löten, braucht keine Platine zum anlöten oder Wiederstände, der Kommt komplett vorbereitet, du muss dann nur die Kabel anschließen.[Wenn du einen der anderen hast, dann kannst du hier naschauen wie du ihn anschließt](https://learn.adafruit.com/dht/connecting-to-a-dhtxx-sensor). Achte auf den Wiederstand von _20-50 Kilo Ohm_.
+Damit sind alle Snesoren vorbereitet.
+3. Nun müssen wir die Buchsenleistenleisten an den Raspberry Pi Pico anlöten. Eine Buchenleiste sieht wie im Bild hier aus: ![](https://cdn-reichelt.de/bilder/web/xxl_ws/C140/BKL_10120984.png "Das ist eine Buchenleiste")
+* Der Raspbbery Pi Pico hat 40 Sogenannte Pins oben. Davon habe 28 spezielle Funktionen. Interessiert uns aber alles nicht. Um uns das leben einfacher zu machen, schuern wir uns das Pinout Diagram an was der Hersteller bereit stellt. ![](https://www.raspberrypi.org/documentation/rp2040/getting-started/static/64b50c4316a7aefef66290dcdecda8be/Pico-R3-SDK11-Pinout.svg "Pinout Diagram"). Hier ist sehr viel zu sehen, aber vieles ist für dich egal, wenn du den Quellcode nicht verändern willst.
+* Wir Orientiern nun unseren Raspberry Pi Pico genauso wie im bild, das Logo mit der Himbeere kommt nach unten und die USB Buchse kommt nach oben.
+* Nun suchen wir aus unsern Set an Buchenleisten So viele raus, das wir insgesammt 14 Buchen haben. Wenn du das Set von Pimoroni gekauft hast, dann musst du die Kurzen Enden der buchen mit Sandpapier etwas abreiben, damit sie nebeneinander passen. Wenn du von Reichelt gekauft hast, kannst du dir einfach 14 von den 20 Buchen abschneiden. Du braucht 2 mal Leisten der Länge 14 und nicht mehr.
+`//TODO insert Picture`
+* * Diese Leisten löten wir jetzt auf beide Seiten an, so das sie nach oben Zeigen. Das heißt wir wollen die Leisten und die Himbeere zugleich sehen können. Wir löten sie aber nicht irgendwo an, Die Leisten werden von Pin 7 (GP5) bis Pin 20 (GP15) angelötet, die obenren 6 Pins neben der USB-Buche bleiben frei. Um zu wissen wo diese Pins sind, könne wir uns wieder das Pinout Diagram anschauen. Jeder der Pins zwischen Pin 7 und 20 muss angelötet werden.
+* * auf der anderen Seite machen wir das selbe. Wir lassen wieder die Oben 6 Pins frei, und löten die Buchenleiste an alle Pins zwischen Pin 21 (GP16) und Pin 34 (GP28) an. Das hat dann folgend auszusehen. *Ich habe bei mir noch Pin 30 (Run) frei gelassen, das müsst ihr aber nicht machen*
+`//TODO insert Picture`
+* Nun kommen wir zu den 6 Freigelassen Pins auf beiden Seiten. diese füllen wir mit den Gewinkelten Stiftleisten auf. Also die die um die Ecke gehen. [](https://cdn-reichelt.de/bilder/web/xxl_ws/C140/SL3.png "Gewinkelte Stiftleiste") du kannst einfach 6 abscheiden von denen die du gekauft hast.
+Damit ist der Raspberry Pi Pico fertig gelötet, lege ihn ersteinmal beiseite, ihn brauchen wir erst einmal nicht.
+
+Nun Kommen wir zum Löten, des "Featherwings", der ist realtiv komplizert zu löten, wenn du Probleme damit hast, dann frage einen Verwanten oder einen Freund.
+4. Im Set ist sehr viel Zeug, wir brauchen
