@@ -167,14 +167,10 @@ def tile_0():
 def tile_1():
     # We display the mean (avarage) of all power_usage readings of last 2 min
     read_sensors()
-    #print(solar_power)
     print(power_usage)
-    #tile_line_values(line1, "{:.2} W".format(sum(solar_power)/len(solar_power)),
-                    # 0xffffff, 0x000000, x=20, y=8)
     tile_line_values(line2, "{:.2} W".format(sum(power_usage)/len(power_usage)),
-                     0xffffff, 0x000000, x=20, y=16)
-    # solar_power.clear()  # Remove all values from array so we can fill it again
-    power_usage.clear()
+                     0xffffff, 0x000000, x=20, y=16) 
+    power_usage.clear() # Remove all values from array so we can fill it again
 # -----------------------------------------------------------------------------
 # The tile displaying the Green Gost
 def tile_2():
@@ -200,12 +196,12 @@ def tile_3():
     tile_line_values(line2, "ppb", 0xff0000, x=40, y=20)
     co_concentration.clear()
 # -----------------------------------------------------------------------------
-# Fuck SPD, Fuck CDU
+# Red for the trafic light
 def tile_4():
     read_sensors()
-    tile_line_values(line1, "SPD", 0xff0000, x=8, y=4)
-    tile_line_values(line2, "&", 0xffffff, x=30, y=4)
-    tile_line_values(line3, "CDU", 0x0000ff, x=40, y=4)
+    tile_line_values(line1, "Ampel;", 0x00ff00, x=16, y=8)
+    tile_line_values(line2, "das Klima", 0xffff00, x=16, y=16)
+    tile_line_values(line3, "ist Rot!", 0xff0000, x=16, y=24)
     time.sleep(10)
     #TODO Scrolling or have two lines which are displayed after oneother
 # -----------------------------------------------------------------------------
@@ -221,11 +217,11 @@ def tile_5():
                      0xffff00, x=12, y=16)
     temperature.clear()
 # -----------------------------------------------------------------------------
-# The CDU is Poop tile has no text
-def tile_6_10():
+# The RWE is Poop tile has no text
+def tile_6():
     read_sensors()
 # -----------------------------------------------------------------------------
-#
+# Shows CO2 concentration
 def tile_7():
     read_sensors()
     print(co2_concentration)
@@ -238,10 +234,11 @@ def tile_7():
     tile_line_values(line1, "CO2:", 0xff0000, x=2, y=16)
     co2_concentration.clear()
 # -----------------------------------------------------------------------------
-# No more highways
+# Stop blodshed in Ukraine
 def tile_8():
     read_sensors()
-    tile_line_values(line1, "Keine A-49", 0xffffff, x=2, y=4)
+    tile_line_values(line1, "Peace please!", 0xffffff, x=2, y=4)
+    tile_line_values(line2, "Stop the bloodshed!", 0xff0000, x=4, y=12)
 # -----------------------------------------------------------------------------
 # The tile displaying the Nitrogendioxide concentration
 def tile_9():
@@ -251,20 +248,22 @@ def tile_9():
                          0xffffff, x=32, y=12)
     except ZeroDivisionError:
         print("ZeroDivisionError")
-    # tile_line_values(line1, "20", 0xffffff, x=40, y=12)
     nox_concentration.clear()
+# -----------------------------------------------------------------------------
+def tile_10():
+    read_sensors()
+    tile_line_values(line1, "Luetzi", 0xffff00, x=16, y = 12)
+    tile_line_values(line2, "BLEIBT!", 0xffff00, x=16, y = 24)
 # -----------------------------------------------------------------------------
 # The Temperature, humidity tiles
 def tile_11():
     read_sensors()
-    print(humidity)
     # Print the temperature with on foating point number
     tile_line_values(line1, "Humidity:",
                      0x0000ff, x=4, y=8)
 
     tile_line_values(line2, f'{int(sum(humidity)/len(humidity))}%',
                      0x0000ff, x=32, y=24)
-    #TODO scrolling
     humidity.clear()
 # -----------------------------------------------------------------------------
 # Add an case for each tile
@@ -274,10 +273,11 @@ case_tile_2 = tile_2
 case_tile_3 = tile_3
 case_tile_4 = tile_4
 case_tile_5 = tile_5
-case_tile_6_10 = tile_6_10
+case_tile_6 = tile_6
 case_tile_7 = tile_7
 case_tile_8 = tile_8
 case_tile_9 = tile_9
+case_tile_10 = tile_10
 case_tile_11 = tile_11
 
 # adding cases to switch
@@ -287,11 +287,11 @@ switch.add_case(2, case_tile_2, True)
 switch.add_case(3, case_tile_3, True)
 switch.add_case(4, case_tile_4, True)
 switch.add_case(5, case_tile_5, True)
-switch.add_case(6, case_tile_6_10, True)
+switch.add_case(6, case_tile_6, True)
 switch.add_case(7, case_tile_7, True)
 switch.add_case(8, case_tile_8, True)
 switch.add_case(9, case_tile_9, True)
-switch.add_case(10, case_tile_6_10, True)
+switch.add_case(10, case_tile_10, True)
 switch.add_case(11, case_tile_11, True)
 
 # -----------------------------------------------------------------------------
