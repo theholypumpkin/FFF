@@ -16,20 +16,18 @@ import adafruit_ccs811
 import adafruit_dht
 import adafruit_ina219  # Ampere / Volt Sensor
 import multichannel_gas_sensor
-# -----------------------------------------------------------------------------
-# Setting up Sensors
-i2c = busio.I2C(board.GP1, board.GP0)
+
+i2c = busio.I2C(board.GP13, board.GP12)
 ccs = adafruit_ccs811.CCS811(i2c)
-dht = adafruit_dht.DHT22(board.GP5)
-ina_battery = adafruit_ina219.INA219(i2c, 0x41)
+dht = adafruit_dht.DHT22(board.GP11)
+ina_battery = adafruit_ina219.INA219(i2c)
 nox_co = multichannel_gas_sensor.GM_Multi_Gas(i2c)
-# ina_solar = adafruit_ina219.INA219(i2c, 0x41)
 
 switch = Switch()
 
 # Global Variables
 image_cycle = 0
-i = 0  # TODO set value to 0
+i = 0 # TODO set value to 0
 # solar_power = []
 power_usage = []
 co2_concentration = []
@@ -38,11 +36,11 @@ nox_concentration = []
 temperature = []
 humidity = []
 # -----------------------------------------------------------------------------
-# RGB Pins: [GP20 = R1, GP19 = G1, GP21 = B1, GP22 = R2, GP27 = G2, GP28 = B2]
-# ADDR Pins: [GP9 = A, GP8 = B, GP7 = C, GP6 = D]
-# GP26 = CLK
-# GP13 = Latch
-# GP12 = OE (output enable)
+# RGB Pins: [GP17 = R1, GP16 = G1, GP18 = B1, GP20 = R2, GP19 = G2, GP21 = B2]
+# ADDR Pins: [GP22 = A, GP26 = B, GP27 = C, GP28 = D]
+# GP10 = CLK
+# GP15 = Latch
+# GP14 = OE (output enable)
 # -----------------------------------------------------------------------------
 # Matrix Setup
 displayio.release_displays()
@@ -52,10 +50,10 @@ matrix = rgbmatrix.RGBMatrix(  # Gives me 2^4 = 16 Brightness levels to save
     width=64,
     height=32,
     bit_depth=6,
-    rgb_pins=[board.GP20, board.GP19, board.GP21,
-              board.GP22, board.GP27, board.GP28],
-    addr_pins=[board.GP9, board.GP8, board.GP7, board.GP6],
-    clock_pin=board.GP26, latch_pin=board.GP13, output_enable_pin=board.GP12,
+    rgb_pins=[board.GP17, board.GP16, board.GP18,
+              board.GP20, board.GP19, board.GP21],
+    addr_pins=[board.GP22, board.GP26, board.GP27, board.GP28],
+    clock_pin=board.GP10, latch_pin=board.GP14, output_enable_pin=board.GP15,
     doublebuffer=True)
 
 display = framebufferio.FramebufferDisplay(matrix, auto_refresh=True)
@@ -99,6 +97,8 @@ bitmap_group.append(line3)
 display.show(bitmap_group)
 # -----------------------------------------------------------------------------
 # Scroll a line in a defined direction or multiple directions
+
+
 def scroll(line, x, y=0, iterations=1):
     for i in range(iterations):
 
@@ -121,33 +121,37 @@ def scroll(line, x, y=0, iterations=1):
 
         time.sleep(0.06250)  # Wait before restarting the loop
 # -----------------------------------------------------------------------------
+
+
 def read_sensors():
     # TODO Try-Catch-block!
     power_usage.append(ina_battery.power)  # Read the power usage every tile
-    print(f"{ina_battery.power}W")
-    #solar_power.append(ina_solar.power)  # Read power production on every til
+    # print(f"{ina_battery.power}W")
+    # solar_power.append(ina_solar.power)  # Read power production on every til
     try:
         co2_concentration.append(ccs.eco2)
     except RuntimeError as e:
         print("Execption: ", e.args)
         co2_concentration.append(450)
-    else:
-        print("co2 concentration appended to list")
+    # else:
+        # print("co2 concentration appended to list")
 
     nox_concentration.append(nox_co.measureNO2())
     co_concentration.append(nox_co.measureCO())
-    print("co and nox concentration appended to respective lists")
+    # print("co and nox concentration appended to respective lists")
     try:
         temperature.append(dht.temperature)
         humidity.append(dht.humidity)
     except RuntimeError as e:
         print("Execption: ", e.args)  # When the checksum did not validated
-        temperature.append(20) # TODO adjust to tomorrows avg temperature
-        humidity.append(85) # TODO adjust to tomorrows avg humidity
-    else:
-        print("temperature and humidity appended to list")
+        temperature.append(20)  # TODO adjust to tomorrows avg temperature
+        humidity.append(85)  # TODO adjust to tomorrows avg humidity
+    # else:
+      #  print("temperature and humidity appended to list")
 # -----------------------------------------------------------------------------
 # Set text, when tile zero and one are displayed
+
+
 def tile_line_values(line, text="", color=0x000000,
                      background_color=None, x=63, y=31):
     line.text = text
@@ -157,6 +161,8 @@ def tile_line_values(line, text="", color=0x000000,
     line.y = y
 # -----------------------------------------------------------------------------
 # The tile Show your Stripes
+
+
 def tile_0():
     read_sensors()
     tile_line_values(line1)  # Reset line1
@@ -164,15 +170,19 @@ def tile_0():
     scroll(line2, x=-1, iterations=158)
 # -----------------------------------------------------------------------------
 # The tile displaying the Sun and Battery
+
+
 def tile_1():
     # We display the mean (avarage) of all power_usage readings of last 2 min
     read_sensors()
-    print(power_usage)
+    # print(power_usage)
     tile_line_values(line2, "{:.2} W".format(sum(power_usage)/len(power_usage)),
-                     0xffffff, 0x000000, x=20, y=16) 
-    power_usage.clear() # Remove all values from array so we can fill it again
+                     0xffffff, 0x000000, x=20, y=16)
+    power_usage.clear()  # Remove all values from array so we can fill it again
 # -----------------------------------------------------------------------------
 # The tile displaying the Green Gost
+
+
 def tile_2():
     read_sensors()
     tile_line_values(line1, "Buhh!", 0x16ca31, x=32, y=5)
@@ -180,9 +190,11 @@ def tile_2():
     tile_line_values(line3, "Oko!", 0x16ca31, x=32, y=25)
 # -----------------------------------------------------------------------------
 # The tile displaying the Smokestacks and Carbon Monoxide Levels
+
+
 def tile_3():
     read_sensors()
-    print(co_concentration)
+    # print(co_concentration)
     tile_line_values(line2)  # Reset Lines
     tile_line_values(line3)
     # We display the avarage CO2 concentration of the last two minutes
@@ -197,34 +209,43 @@ def tile_3():
     co_concentration.clear()
 # -----------------------------------------------------------------------------
 # Red for the trafic light
+
+
 def tile_4():
     read_sensors()
     tile_line_values(line1, "Ampel;", 0x00ff00, x=16, y=8)
     tile_line_values(line2, "das Klima", 0xffff00, x=16, y=16)
     tile_line_values(line3, "ist Rot!", 0xff0000, x=16, y=24)
     time.sleep(10)
-    #TODO Scrolling or have two lines which are displayed after oneother
+    # TODO Scrolling or have two lines which are displayed after oneother
 # -----------------------------------------------------------------------------
 # The Temperature tile
+
+
 def tile_5():
     read_sensors()
-    print(temperature)
+    # print(temperature)
     # Print the temperature with on foating point number
-    tile_line_values(line1, "{:.2} Grad".format(sum(temperature)/len(temperature)),
+    tile_line_values(line1, "{:.2} C".format(sum(temperature)/len(temperature)),
                      0xffff00, x=12, y=6)
 
-    tile_line_values(line2, "Celsius",
-                     0xffff00, x=12, y=16)
+    tile_line_values(line2, f'{int(sum(humidity)/len(humidity))}%',
+                     0x0000ff, x=26, y=24)
     temperature.clear()
+    humidity.clear()
 # -----------------------------------------------------------------------------
 # The RWE is Poop tile has no text
+
+
 def tile_6():
     read_sensors()
 # -----------------------------------------------------------------------------
 # Shows CO2 concentration
+
+
 def tile_7():
     read_sensors()
-    print(co2_concentration)
+    # print(co2_concentration)
     tile_line_values(line2)  # Reset Lines
     tile_line_values(line3)
     # We display the avarage CO2 concentration of the last two minutes
@@ -234,13 +255,17 @@ def tile_7():
     tile_line_values(line1, "CO2:", 0xff0000, x=2, y=16)
     co2_concentration.clear()
 # -----------------------------------------------------------------------------
-# Stop blodshed in Ukraine
+# Nuclearpower no, thnak you!
+
+
 def tile_8():
     read_sensors()
-    tile_line_values(line1, "Peace please!", 0xffffff, x=2, y=4)
-    tile_line_values(line2, "Stop the bloodshed!", 0xff0000, x=4, y=12)
+    tile_line_values(line1, "Atomkraft Nein Danke!", 0xffffff, x=4, y=4)
+    scroll(line1, x=-1, iterations=127)
 # -----------------------------------------------------------------------------
 # The tile displaying the Nitrogendioxide concentration
+
+
 def tile_9():
     read_sensors()
     try:
@@ -250,21 +275,22 @@ def tile_9():
         print("ZeroDivisionError")
     nox_concentration.clear()
 # -----------------------------------------------------------------------------
+
+
 def tile_10():
     read_sensors()
-    tile_line_values(line1, "Luetzi", 0xffff00, x=16, y = 12)
-    tile_line_values(line2, "BLEIBT!", 0xffff00, x=16, y = 24)
+    tile_line_values(line1, "Luetzi", 0xffff00, x=20, y=12)
+    tile_line_values(line2, "BLEIBT!", 0xffff00, x=24, y=24)
 # -----------------------------------------------------------------------------
-# The Temperature, humidity tiles
+# Fescher Bleibt
+
+
 def tile_11():
     read_sensors()
     # Print the temperature with on foating point number
-    tile_line_values(line1, "Humidity:",
-                     0x0000ff, x=4, y=8)
-
-    tile_line_values(line2, f'{int(sum(humidity)/len(humidity))}%',
-                     0x0000ff, x=32, y=24)
-    humidity.clear()
+    tile_line_values(line1, "Fecher bleibt!, RiWaTu stoppen!",
+                     0xffffff, x=4, y=4)
+    scroll(line1, x=-1, iterations=187)
 # -----------------------------------------------------------------------------
 # Add an case for each tile
 case_tile_0 = tile_0
