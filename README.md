@@ -1,3 +1,4 @@
+# NOTE: README ist nicht up to date, Ich werde es irgendwann mal anpassen :D
 # Digitales Fridays For Future Demoschild
 Dieser Python Skript stellt diverse Bilder sowie live gemessende CO2, Temperatur, Luftfeuchtigkeit sowie Optional Stromverbrauch auf zwei 32x32 LED Matrizen dar.
 Der Skript wird auf einem RaspberryPi Pico der Adafruit's Circuit Python 6.3 als Python Interpreter nutzt.
