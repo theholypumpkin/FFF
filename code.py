@@ -21,7 +21,7 @@ i2c = busio.I2C(board.GP13, board.GP12)
 ccs = adafruit_ccs811.CCS811(i2c)
 dht = adafruit_dht.DHT22(board.GP11)
 ina_battery = adafruit_ina219.INA219(i2c)
-nox_co = multichannel_gas_sensor.GM_Multi_Gas(i2c)
+nox_co = multichannel_gas_sensor.MultichannelGas(i2c)
 
 switch = Switch()
 
@@ -131,21 +131,23 @@ def read_sensors():
     try:
         co2_concentration.append(ccs.eco2)
     except RuntimeError as e:
-        print("Execption: ", e.args)
-        co2_concentration.append(450)
+        #print("Execption: ", e.args)
+        pass
+        #co2_concentration.append(450)
     # else:
         # print("co2 concentration appended to list")
 
-    nox_concentration.append(nox_co.measureNO2())
-    co_concentration.append(nox_co.measureCO())
+    nox_concentration.append(nox_co.measure_NO2)
+    co_concentration.append(nox_co.measure_CO)
     # print("co and nox concentration appended to respective lists")
     try:
         temperature.append(dht.temperature)
         humidity.append(dht.humidity)
     except RuntimeError as e:
-        print("Execption: ", e.args)  # When the checksum did not validated
-        temperature.append(20)  # TODO adjust to tomorrows avg temperature
-        humidity.append(85)  # TODO adjust to tomorrows avg humidity
+        pass
+        #print("Execption: ", e.args)  # When the checksum did not validated
+        #temperature.append(20)  # TODO adjust to tomorrows avg temperature
+        #humidity.append(85)  # TODO adjust to tomorrows avg humidity
     # else:
       #  print("temperature and humidity appended to list")
 # -----------------------------------------------------------------------------
